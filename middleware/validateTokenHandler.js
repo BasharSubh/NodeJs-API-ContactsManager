@@ -7,7 +7,7 @@ const validateToken = asyncHandler(async (req, res, next) => {
   if (authHeader && authHeader.startsWith("Bearer")) {
     token = authHeader.split(" ")[1];
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-       if (err.message === "jwt expired") {
+       if (err?.message === "jwt expired") {
          res.status(401);
         throw new Error("Your session has expired. Please login again.")
             }
