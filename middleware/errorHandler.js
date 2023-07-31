@@ -38,9 +38,9 @@ const errorHandler = (err, req, res, next) => {
       break;
   }
 
-    if (err) {
-        return res.status(400).json({Title: "bad request", Error: err.message || null });
-      }
+    // if (err) {
+    //     return res.status(400).json({Title: "bad request", Error: err.message || null });
+    //   }
   
 };
 
