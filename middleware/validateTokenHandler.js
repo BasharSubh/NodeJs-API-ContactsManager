@@ -3,23 +3,23 @@ const jwt = require("jsonwebtoken");
 
 const validateToken = asyncHandler(async (req, res, next) => {
   let token;
-  const authHeader = req.headers.authorization || req.headers.Authorization;
-
-  if (authHeader && authHeader.startsWith('Bearer')) {
-    token = authHeader.split(' ')[1];
-    try {
-      const decoded = jwt.verify(token, process.env.TOKEN);
-      req.user = decoded.user;
-      return next();
-    } catch (err) {
-      if (err.message === "jwt expired") {
-        return res.status(401).json({ error: 'Your session has expired. Please login again.' });
+  let authHeader = req.headers.Authorization || req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer")) {
+    token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) {
+        res.status(401);
+        throw new Error("User is not authorized");
       }
-      return res.status(401).json({ error: 'User is not authorized.' });
+      req.user = decoded.user;
+      next();
+    });
+
+    if (!token) {
+      res.status(401);
+      throw new Error("User is not authorized or token is missing");
     }
   }
-
-  res.status(401).json({ error: 'User is not authorized.' });
 });
 
 module.exports = validateToken;
