@@ -37,6 +37,11 @@ const errorHandler = (err, req, res, next) => {
       console.log("No Error, All good !", err.message);
       break;
   }
+
+    if (err) {
+        return res.status(400).json({Title: "bad request", Error: err.message || null });
+      }
+  
 };
 
 module.exports = errorHandler;
