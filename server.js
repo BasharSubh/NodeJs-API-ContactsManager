@@ -20,6 +20,10 @@ app.use('/api/users', require('./routes/userRoutes'))
 
 app.use(errorHandler)
 
+app.all('*', (req, res, next) => {
+  res.status(404);
+  next(new Error('Route not found'));
+});
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)
